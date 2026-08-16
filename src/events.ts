@@ -882,11 +882,24 @@ export const initializeEvents = () => {
             player
         );
       const textdraw_ = omp.textdraws.get(textdraw);
-      if (textdraw_ === undefined)
+      if (textdraw_ === undefined) {
+        const playerTextdraw = omp.playerTextDraws
+          .at(player_.getID())
+          ?.get(textdraw);
+        if (playerTextdraw !== undefined) {
+          return processEventListeners(
+            "playerClickPlayerTextDraw",
+            badRet,
+            player_,
+            playerTextdraw
+          );
+        }
+
         throw new Error(
           "Unable to cast textdraw to TextDraw for playerClickTextDraw. Value: " +
             textdraw
         );
+      }
 
       return processEventListeners(
         "playerClickTextDraw",
@@ -907,7 +920,7 @@ export const initializeEvents = () => {
           "Unable to cast player to Player for playerClickPlayerTextDraw. Value: " +
             player
         );
-      const textdraw_ = omp.textdraws.get(textdraw);
+      const textdraw_ = omp.playerTextDraws.at(player_.getID())?.get(textdraw);
       if (textdraw_ === undefined)
         throw new Error(
           "Unable to cast textdraw to TextDraw for playerClickPlayerTextDraw. Value: " +

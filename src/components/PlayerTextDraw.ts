@@ -1,5 +1,5 @@
 import { Player } from "./index";
-import { PTR, internal_omp } from "../globals";
+import { PTR, internal_omp, omp } from "../globals";
 
 /**
  * PlayerTextDraw class
@@ -61,6 +61,12 @@ export default class PlayerTextDraw {
     this.ptr = PTR(result.ret);
     if (result.hasOwnProperty("id")) {
       this.id = result.id;
+    }
+
+    const playerId = player.getID();
+    if (playerId !== null) {
+      const playerPool = omp.playerTextDraws?.at(playerId);
+      playerPool?.add_INTERNAL_UNSAFE(this);
     }
   }
 

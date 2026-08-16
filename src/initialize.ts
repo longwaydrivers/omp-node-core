@@ -124,7 +124,7 @@ async function onResourceStart(_: number, error: boolean) {
         const entries = omp.playerTextDraws.entries_INTERNAL_UNSAFE();
         const pool = new PlayerPool<PlayerTextDraw>(player);
 
-        for (let i = 0; i < constants.TEXT_LABEL_POOL_SIZE; i++) {
+        for (let i = 0; i < constants.PLAYER_TEXTDRAW_POOL_SIZE; i++) {
           try {
             // @ts-ignore
             pool.add_INTERNAL_UNSAFE(new PlayerTextDraw(player, i));
