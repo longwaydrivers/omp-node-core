@@ -810,7 +810,7 @@ interface IOMP {
    */
   on(
     eventName: "playerClickPlayerTextDraw",
-    callback: (player: Player, textdraw: TextDraw) => any
+    callback: (player: Player, textdraw: PlayerTextDraw) => any
   ): void;
 
   /**
@@ -2157,7 +2157,7 @@ interface IOMP {
    */
   addListener(
     eventName: "playerClickPlayerTextDraw",
-    callback: (player: Player, textdraw: TextDraw) => any
+    callback: (player: Player, textdraw: PlayerTextDraw) => any
   ): void;
 
   /**
@@ -3471,7 +3471,7 @@ interface IOMP {
    */
   removeListener(
     eventName: "playerClickPlayerTextDraw",
-    callback: (player: Player, textdraw: TextDraw) => any
+    callback: (player: Player, textdraw: PlayerTextDraw) => any
   ): void;
 
   /**
