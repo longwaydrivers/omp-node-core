@@ -76,7 +76,7 @@ test("falls back to both defaults when configuration is invalid", async () => {
       ["textdraw.global_limit", "-1"],
       ["textdraw.player_limit", "2254"],
     ]),
-    { global: 256, player: 2048 },
+    { global: 2048, player: 256 },
   );
 
   assert.deepEqual(
@@ -84,10 +84,10 @@ test("falls back to both defaults when configuration is invalid", async () => {
       ["textdraw.global_limit", "65535"],
       ["textdraw.player_limit", "1"],
     ]),
-    { global: 256, player: 2048 },
+    { global: 2048, player: 256 },
   );
 });
 
-test("uses the PR defaults when no limit is configured", async () => {
-  assert.deepEqual(await limitsFor([]), { global: 256, player: 2048 });
+test("uses the core defaults when no limit is configured", async () => {
+  assert.deepEqual(await limitsFor([]), { global: 2048, player: 256 });
 });
