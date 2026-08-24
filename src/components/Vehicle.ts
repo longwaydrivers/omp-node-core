@@ -1,5 +1,15 @@
-import { Player } from "./index";
-import { PTR, internal_omp, omp } from "../globals";
+import type Player from "./Player";
+import { PTR, internal_omp, omp, type NativePointer } from "../globals";
+import type { QuaternionResult, Vector3Result } from "../types";
+import {
+  CARMODTYPE,
+  LANDING_GEAR_STATE,
+  VEHICLE_MODEL_INFO,
+  VEHICLE_PANEL_STATUS,
+  VehicleDoorStatusMask,
+  VehicleLightStatusMask,
+  VehicleTireStatusMask,
+} from "../enums";
 
 /**
  * Vehicle class
@@ -11,7 +21,7 @@ export default class Vehicle {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -34,6 +44,8 @@ export default class Vehicle {
    * @param {boolean} addSiren
    * @throws Will throw an error if the vehicle creation fails
    */
+  constructor(id: number);
+
   constructor(
     modelid: number,
     x: number,
@@ -48,7 +60,7 @@ export default class Vehicle {
 
   constructor(
     model: number,
-    x?: any,
+    x?: number,
     y?: number,
     z?: number,
     rotation?: number,
@@ -111,7 +123,7 @@ export default class Vehicle {
    * @description get vehicle pointer
    * @returns {number|null} vehicle pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -155,7 +167,7 @@ export default class Vehicle {
    * @returns {{ret: boolean, x: number,y: number,z: number}} return object
    * @throws Will throw an error if the vehicle is invalid
    */
-  getPos(): { ret: boolean; x: number; y: number; z: number } {
+  getPos(): Vector3Result {
     if (!this.ptr) {
       throw new Error("Vehicle instance is not valid");
     }
@@ -200,13 +212,7 @@ export default class Vehicle {
    * @returns {{ret: boolean, w: number,x: number,y: number,z: number}} return object
    * @throws Will throw an error if the vehicle is invalid
    */
-  getRotationQuat(): {
-    ret: boolean;
-    w: number;
-    x: number;
-    y: number;
-    z: number;
-  } {
+  getRotationQuat(): QuaternionResult {
     if (!this.ptr) {
       throw new Error("Vehicle instance is not valid");
     }
@@ -670,7 +676,7 @@ export default class Vehicle {
    * @returns {number}
    * @throws Will throw an error if the vehicle is invalid
    */
-  getComponentInSlot(slot: number): number {
+  getComponentInSlot(slot: CARMODTYPE): number {
     if (!this.ptr) {
       throw new Error("Vehicle instance is not valid");
     }
@@ -685,7 +691,7 @@ export default class Vehicle {
    * @returns {number}
    * @throws Will throw an error if the vehicle is invalid
    */
-  static getComponentType(componentid: number): number {
+  static getComponentType(componentid: number): CARMODTYPE {
     const result = internal_omp.Vehicle.GetComponentType(componentid);
     return result.ret;
   }
@@ -750,7 +756,7 @@ export default class Vehicle {
    * @returns {{ret: boolean, x: number,y: number,z: number}} return object
    * @throws Will throw an error if the vehicle is invalid
    */
-  getVelocity(): { ret: boolean; x: number; y: number; z: number } {
+  getVelocity(): Vector3Result {
     if (!this.ptr) {
       throw new Error("Vehicle instance is not valid");
     }
@@ -800,10 +806,10 @@ export default class Vehicle {
    */
   getDamageStatus(): {
     ret: boolean;
-    panels: number;
-    doors: number;
-    lights: number;
-    tires: number;
+    panels: VEHICLE_PANEL_STATUS;
+    doors: VehicleDoorStatusMask;
+    lights: VehicleLightStatusMask;
+    tires: VehicleTireStatusMask;
   } {
     if (!this.ptr) {
       throw new Error("Vehicle instance is not valid");
@@ -823,10 +829,10 @@ export default class Vehicle {
    * @throws Will throw an error if the vehicle is invalid
    */
   updateDamageStatus(
-    panels: number,
-    doors: number,
-    lights: number,
-    tires: number
+    panels: VEHICLE_PANEL_STATUS,
+    doors: VehicleDoorStatusMask,
+    lights: VehicleLightStatusMask,
+    tires: VehicleTireStatusMask
   ): boolean {
     if (!this.ptr) {
       throw new Error("Vehicle instance is not valid");
@@ -851,7 +857,7 @@ export default class Vehicle {
    */
   static getModelInfo(
     vehiclemodel: number,
-    infotype: number
+    infotype: VEHICLE_MODEL_INFO
   ): {
     ret: boolean;
     x: number;
@@ -896,7 +902,7 @@ export default class Vehicle {
    * @returns {number}
    * @throws Will throw an error if the vehicle is invalid
    */
-  getLandingGearState(): number {
+  getLandingGearState(): LANDING_GEAR_STATE {
     if (!this.ptr) {
       throw new Error("Vehicle instance is not valid");
     }

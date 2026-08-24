@@ -1,5 +1,5 @@
-import { Player } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type Player from "./Player";
+import { PTR, internal_omp, type NativePointer } from "../globals";
 
 /**
  * Menu class
@@ -8,7 +8,7 @@ export default class Menu {
   /**
    * @private @var {number|null} Menu pointer
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @private @var {number|null} Menu ID
@@ -25,6 +25,8 @@ export default class Menu {
    * @param {number} column2Width
    * @throws Will throw an error if the menu creation fails
    */
+  constructor(id: number);
+
   constructor(
     title: string,
     columns: number,
@@ -96,7 +98,7 @@ export default class Menu {
    * @description get menu pointer
    * @returns {number|null} menu pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 

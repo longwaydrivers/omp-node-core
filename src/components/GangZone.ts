@@ -1,5 +1,5 @@
-import { Player } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type Player from "./Player";
+import { PTR, internal_omp, type NativePointer } from "../globals";
 
 /**
  * GangZone class
@@ -11,7 +11,7 @@ export default class GangZone {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -29,6 +29,7 @@ export default class GangZone {
    * @param {number} maxy
    * @throws Will throw an error if the gangZone creation fails
    */
+  constructor(id: number);
   constructor(minx: number, miny: number, maxx: number, maxy: number);
 
   constructor(minx: number, miny?: number, maxx?: number, maxy?: number) {
@@ -79,7 +80,7 @@ export default class GangZone {
    * @description get gangZone pointer
    * @returns {number|null} gangZone pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 

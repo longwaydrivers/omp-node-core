@@ -1,5 +1,6 @@
-import { Player } from "./index";
+import type Player from "./Player";
 import { internal_omp } from "../globals";
+import { PLAYER_RECORDING_TYPE } from "../enums";
 
 /**
  * Recording class
@@ -12,7 +13,7 @@ export default class Recording {
    * @param {string} file
    * @returns {boolean}
    */
-  static start(player: Player, type: number, file: string): boolean {
+  static start(player: Player, type: PLAYER_RECORDING_TYPE, file: string): boolean {
     const result = internal_omp.Recording.Start(player.getPtr(), type, file);
     return result.ret;
   }

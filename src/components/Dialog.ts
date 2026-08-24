@@ -1,5 +1,6 @@
-import { Player } from "./index";
+import type Player from "./Player";
 import { internal_omp } from "../globals";
+import { DIALOG_STYLE } from "../enums";
 
 /**
  * Dialog class
@@ -19,7 +20,7 @@ export default class Dialog {
   static show(
     player: Player,
     dialog: number,
-    style: number,
+    style: DIALOG_STYLE,
     title: string,
     body: string,
     button1: string,

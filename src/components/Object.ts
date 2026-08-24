@@ -1,5 +1,11 @@
-import { Player, Vehicle, omp } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type Player from "./Player";
+import type Vehicle from "./Vehicle";
+import { PTR, internal_omp, omp, type NativePointer } from "../globals";
+import type { Vector3Result } from "../types";
+import {
+  OBJECT_MATERIAL_SIZE,
+  OBJECT_MATERIAL_TEXT_ALIGN,
+} from "../enums";
 
 /**
  * ObjectMp class
@@ -11,7 +17,7 @@ export default class ObjectMp {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -33,6 +39,8 @@ export default class ObjectMp {
    * @param {number} drawDistance
    * @throws Will throw an error if the object creation fails
    */
+  constructor(id: number);
+
   constructor(
     modelid: number,
     x: number,
@@ -109,7 +117,7 @@ export default class ObjectMp {
    * @description get object pointer
    * @returns {number|null} object pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -261,7 +269,7 @@ export default class ObjectMp {
    * @returns {{ret: boolean, x: number,y: number,z: number}} return object
    * @throws Will throw an error if the object is invalid
    */
-  getPos(): { ret: boolean; x: number; y: number; z: number } {
+  getPos(): Vector3Result {
     if (!this.ptr) {
       throw new Error("Object instance is not valid");
     }
@@ -505,13 +513,13 @@ export default class ObjectMp {
   setMaterialText(
     text: string,
     materialIndex: number,
-    materialSize: number,
+    materialSize: OBJECT_MATERIAL_SIZE,
     fontface: string,
     fontsize: number,
     bold: boolean,
     fontColor: number,
     backgroundColor: number,
-    textalignment: number
+    textalignment: OBJECT_MATERIAL_TEXT_ALIGN
   ): boolean {
     if (!this.ptr) {
       throw new Error("Object instance is not valid");
@@ -732,13 +740,13 @@ export default class ObjectMp {
   getMaterialText(materialIndex: number): {
     ret: boolean;
     text: string;
-    materialSize: number;
+    materialSize: OBJECT_MATERIAL_SIZE;
     fontFace: string;
     fontSize: number;
     bold: boolean;
     fontColor: number;
     backgroundColor: number;
-    textAlignment: number;
+    textAlignment: OBJECT_MATERIAL_TEXT_ALIGN;
   } {
     if (!this.ptr) {
       throw new Error("Object instance is not valid");

@@ -1,5 +1,12 @@
-import { ObjectMp, Player, Vehicle, omp } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type ObjectMp from "./Object";
+import type Player from "./Player";
+import type Vehicle from "./Vehicle";
+import { PTR, internal_omp, omp, type NativePointer } from "../globals";
+import type { Vector3Result } from "../types";
+import {
+  OBJECT_MATERIAL_SIZE,
+  OBJECT_MATERIAL_TEXT_ALIGN,
+} from "../enums";
 
 /**
  * PlayerObject class
@@ -11,7 +18,7 @@ export default class PlayerObject {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -42,6 +49,8 @@ export default class PlayerObject {
    * @param {number} drawDistance
    * @throws Will throw an error if the playerObject creation fails
    */
+  constructor(player: Player, id: number);
+
   constructor(
     player: Player,
     modelid: number,
@@ -130,7 +139,7 @@ export default class PlayerObject {
    * @description get playerObject pointer
    * @returns {number|null} playerObject pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -288,7 +297,7 @@ export default class PlayerObject {
    * @returns {{ret: boolean, x: number,y: number,z: number}} return object
    * @throws Will throw an error if the playerObject is invalid
    */
-  getPos(): { ret: boolean; x: number; y: number; z: number } {
+  getPos(): Vector3Result {
     if (!this.ptr || !this.player) {
       throw new Error("PlayerObject instance is not valid");
     }
@@ -536,13 +545,13 @@ export default class PlayerObject {
   setMaterialText(
     text: string,
     materialIndex: number,
-    materialSize: number,
+    materialSize: OBJECT_MATERIAL_SIZE,
     fontface: string,
     fontsize: number,
     bold: boolean,
     fontColor: number,
     backgroundColor: number,
-    textalignment: number
+    textalignment: OBJECT_MATERIAL_TEXT_ALIGN
   ): boolean {
     if (!this.ptr || !this.player) {
       throw new Error("PlayerObject instance is not valid");
@@ -772,13 +781,13 @@ export default class PlayerObject {
   getMaterialText(materialIndex: number): {
     ret: boolean;
     text: string;
-    materialSize: number;
+    materialSize: OBJECT_MATERIAL_SIZE;
     fontFace: string;
     fontSize: number;
     bold: boolean;
     fontColor: number;
     backgroundColor: number;
-    textAlignment: number;
+    textAlignment: OBJECT_MATERIAL_TEXT_ALIGN;
   } {
     if (!this.ptr || !this.player) {
       throw new Error("PlayerObject instance is not valid");

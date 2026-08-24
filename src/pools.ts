@@ -1,16 +1,17 @@
-import Player from "./components/Player.js";
+import type Player from "./components/Player.js";
+import type { NativePointer, PoolEntity } from "./types";
 
-export class Pool<T> {
+export class Pool<T extends PoolEntity> {
   /**
-   * @type {Map<number, T>}
+   * @type {Map<NativePointer, T>}
    */
-  private entries = new Map<number, T>();
+  private entries = new Map<NativePointer, T>();
 
   /**
    * @description A map of entity pointers, with their IDs as key
-   * @type {Map<number, number>}
+   * @type {Map<number, NativePointer>}
    */
-  private entityPtrs = new Map<number, number>();
+  private entityPtrs = new Map<number, NativePointer>();
 
   /**
    * @method at
@@ -20,7 +21,7 @@ export class Pool<T> {
    */
   at(id: number): T | undefined {
     const ptr = this.entityPtrs.get(id);
-    if (ptr) {
+    if (ptr !== undefined) {
       return this.entries.get(ptr);
     }
     return undefined;
@@ -29,10 +30,10 @@ export class Pool<T> {
   /**
    * @method get
    * @description Get entity instance based on their pointer
-   * @param {number} ptr - entity pointer
+   * @param {NativePointer} ptr - entity pointer
    * @returns {T|undefined}
    */
-  get(ptr: any): T | undefined {
+  get(ptr: NativePointer): T | undefined {
     return this.entries.get(ptr);
   }
 
@@ -40,61 +41,65 @@ export class Pool<T> {
    * @method at
    * @returns {T[]} a copy of array of entities
    */
-  all() {
-    return [...Array.from(this.entries.values())];
+  all(): T[] {
+    return [...this.entries.values()];
   }
 
   /**
    * @method forEach
-   * @param {function(T, number): void} callback - The function to execute for each entity.
+   * @param {function(T, NativePointer): void} callback - The function to execute for each entity and pointer.
    */
-  forEach(callback: (entity: T, index: number) => void) {
+  forEach(callback: (entity: T, pointer: NativePointer) => void): void {
     this.entries.forEach((value, key) => callback(value, key));
   }
 
-  add_INTERNAL_UNSAFE(entity: T) {
-    if (entity) {
-      // @ts-ignore
-      this.entityPtrs.set(entity.getID(), entity.getPtr());
-      // @ts-ignore
-      this.entries.set(entity.getPtr(), entity);
+  add_INTERNAL_UNSAFE(entity: T): void {
+    const id = entity.getID();
+    const ptr = entity.getPtr();
+    if (id === null || ptr === null) {
+      return;
     }
+
+    this.entityPtrs.set(id, ptr);
+    this.entries.set(ptr, entity);
   }
 
-  remove_INTERNAL_UNSAFE(entity: T) {
-    if (entity) {
-      // @ts-ignore
-      this.entityPtrs.delete(entity.getID());
-      // @ts-ignore
-      this.entries.delete(entity.getPtr());
+  remove_INTERNAL_UNSAFE(entity: T): void {
+    const id = entity.getID();
+    const ptr = entity.getPtr();
+    if (id === null || ptr === null) {
+      return;
     }
+
+    this.entityPtrs.delete(id);
+    this.entries.delete(ptr);
   }
 
-  entries_INTERNAL_UNSAFE() {
+  entries_INTERNAL_UNSAFE(): Map<NativePointer, T> {
     return this.entries;
   }
 
-  ids_INTERNAL_UNSAFE() {
+  ids_INTERNAL_UNSAFE(): Map<number, NativePointer> {
     return this.entityPtrs;
   }
 }
 
-export class PlayerPool<T> {
+export class PlayerPool<T extends PoolEntity> {
   /**
    * @type {Player}
    */
   player: Player | null = null;
 
   /**
-   * @type {Map<number, T>}
+   * @type {Map<NativePointer, T>}
    */
-  entries = new Map<number, T>();
+  entries = new Map<NativePointer, T>();
 
   /**
    * @description A map of player entity pointers, with their IDs as key
-   * @type {Map<number, number>}
+   * @type {Map<number, NativePointer>}
    */
-  entityPtrs = new Map<number, number>();
+  entityPtrs = new Map<number, NativePointer>();
 
   /**
    * @constructor
@@ -110,7 +115,7 @@ export class PlayerPool<T> {
    * @param {number} id
    * @returns {T|undefined}
    */
-  at(id: number) {
+  at(id: number): T | undefined {
     const ptr = this.entityPtrs.get(id);
     if (ptr !== undefined) {
       return this.entries.get(ptr);
@@ -121,10 +126,10 @@ export class PlayerPool<T> {
   /**
    * @method get
    * @description Get player entity instance based on their pointer
-   * @param {number} ptr - player entity pointer
+   * @param {NativePointer} ptr - player entity pointer
    * @returns {T|undefined}
    */
-  get(ptr: any) {
+  get(ptr: NativePointer): T | undefined {
     return this.entries.get(ptr);
   }
 
@@ -132,41 +137,45 @@ export class PlayerPool<T> {
    * @method all
    * @returns {T[]} a copy of array of player entity
    */
-  all() {
-    return [...Array.from(this.entries.values())];
+  all(): T[] {
+    return [...this.entries.values()];
   }
 
   /**
    * @method forEach
-   * @param {function(T, number): void} callback - The function to execute for each player entity.
+   * @param {function(T, NativePointer): void} callback - The function to execute for each player entity and pointer.
    */
-  forEach(callback: (entity: T, index: number) => void) {
+  forEach(callback: (entity: T, pointer: NativePointer) => void): void {
     this.entries.forEach((value, key) => callback(value, key));
   }
 
-  add_INTERNAL_UNSAFE(entity: T) {
-    if (entity) {
-      // @ts-ignore
-      this.entityPtrs.set(entity.getID(), entity.getPtr());
-      // @ts-ignore
-      this.entries.set(entity.getPtr(), entity);
+  add_INTERNAL_UNSAFE(entity: T): void {
+    const id = entity.getID();
+    const ptr = entity.getPtr();
+    if (id === null || ptr === null) {
+      return;
     }
+
+    this.entityPtrs.set(id, ptr);
+    this.entries.set(ptr, entity);
   }
 
-  remove_INTERNAL_UNSAFE(entity: T) {
-    if (entity) {
-      // @ts-ignore
-      this.entityPtrs.delete(entity.getID());
-      // @ts-ignore
-      this.entries.delete(entity.getPtr());
+  remove_INTERNAL_UNSAFE(entity: T): void {
+    const id = entity.getID();
+    const ptr = entity.getPtr();
+    if (id === null || ptr === null) {
+      return;
     }
+
+    this.entityPtrs.delete(id);
+    this.entries.delete(ptr);
   }
 
-  entries_INTERNAL_UNSAFE() {
+  entries_INTERNAL_UNSAFE(): Map<NativePointer, T> {
     return this.entries;
   }
 
-  ids_INTERNAL_UNSAFE() {
+  ids_INTERNAL_UNSAFE(): Map<number, NativePointer> {
     return this.entityPtrs;
   }
 }
@@ -180,11 +189,11 @@ export class PerPlayerEntityPool<T> {
    * @param {number} playerid
    * @returns {T|undefined}
    */
-  at(playerid: number) {
+  at(playerid: number): T | undefined {
     return this.entries.get(playerid);
   }
 
-  entries_INTERNAL_UNSAFE() {
+  entries_INTERNAL_UNSAFE(): Map<number, T> {
     return this.entries;
   }
 }

@@ -1,5 +1,6 @@
-import { Player } from "./index";
+import type Player from "./Player";
 import { internal_omp } from "../globals";
+import { CP_TYPE } from "../enums";
 
 /**
  * RaceCheckpoint class
@@ -20,7 +21,7 @@ export default class RaceCheckpoint {
    */
   static set(
     player: Player,
-    type: number,
+    type: CP_TYPE,
     x: number,
     y: number,
     z: number,

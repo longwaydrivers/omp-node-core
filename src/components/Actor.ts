@@ -1,5 +1,6 @@
-import { Player } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type Player from "./Player";
+import { PTR, internal_omp, type NativePointer } from "../globals";
+import type { Vector3Result } from "../types";
 
 /**
  * Actor class
@@ -11,7 +12,7 @@ export default class Actor {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -30,6 +31,7 @@ export default class Actor {
    * @param {number} rot
    * @throws Will throw an error if the actor creation fails
    */
+  constructor(id: number);
   constructor(model: number, x: number, y: number, z: number, rot: number);
 
   constructor(model: number, x?: number, y?: number, z?: number, rot?: number) {
@@ -79,7 +81,7 @@ export default class Actor {
    * @description get actor pointer
    * @returns {number|null} actor pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -216,7 +218,7 @@ export default class Actor {
    * @returns {{ret: boolean, x: number,y: number,z: number}} return object
    * @throws Will throw an error if the actor is invalid
    */
-  getPos(): { ret: boolean; x: number; y: number; z: number } {
+  getPos(): Vector3Result {
     if (!this.ptr) {
       throw new Error("Actor instance is not valid");
     }

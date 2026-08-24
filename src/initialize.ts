@@ -30,7 +30,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.vehicles = new Pool<Vehicle>();
     for (let i = 0; i < constants.VEHICLE_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.vehicles.add_INTERNAL_UNSAFE(new Vehicle(i));
       } catch (e) {}
     }
@@ -38,7 +37,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.objects = new Pool<ObjectMp>();
     for (let i = 0; i < constants.OBJECT_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.objects.add_INTERNAL_UNSAFE(new ObjectMp(i));
       } catch (e) {}
     }
@@ -46,7 +44,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.textdraws = new Pool<TextDraw>();
     for (let i = 0; i < constants.GLOBAL_TEXTDRAW_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.textdraws.add_INTERNAL_UNSAFE(new TextDraw(i));
       } catch (e) {}
     }
@@ -54,7 +51,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.pickups = new Pool<Pickup>();
     for (let i = 0; i < constants.PICKUP_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.pickups.add_INTERNAL_UNSAFE(new Pickup(i));
       } catch (e) {}
     }
@@ -62,7 +58,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.gangzones = new Pool<GangZone>();
     for (let i = 0; i < constants.GANG_ZONE_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.gangzones.add_INTERNAL_UNSAFE(new GangZone(i));
       } catch (e) {}
     }
@@ -70,7 +65,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.textlabels = new Pool<TextLabel>();
     for (let i = 0; i < constants.TEXT_LABEL_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.textlabels.add_INTERNAL_UNSAFE(new TextLabel(i));
       } catch (e) {}
     }
@@ -78,7 +72,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.actors = new Pool<Actor>();
     for (let i = 0; i < constants.ACTOR_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.actors.add_INTERNAL_UNSAFE(new Actor(i));
       } catch (e) {}
     }
@@ -86,7 +79,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.menus = new Pool<Menu>();
     for (let i = 0; i < constants.MENU_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.menus.add_INTERNAL_UNSAFE(new Menu(i));
       } catch (e) {}
     }
@@ -94,7 +86,6 @@ async function onResourceStart(_: number, error: boolean) {
     omp.npcs = new Pool<NPC>();
     for (let i = 0; i < constants.NPC_POOL_SIZE; i++) {
       try {
-        // @ts-ignore
         omp.npcs.add_INTERNAL_UNSAFE(new NPC(i));
       } catch (e) {}
     }
@@ -108,7 +99,6 @@ async function onResourceStart(_: number, error: boolean) {
 
         for (let i = 0; i < constants.OBJECT_POOL_SIZE; i++) {
           try {
-            // @ts-ignore
             pool.add_INTERNAL_UNSAFE(new PlayerObject(player, i));
           } catch (e) {}
         }
@@ -126,7 +116,6 @@ async function onResourceStart(_: number, error: boolean) {
 
         for (let i = 0; i < constants.PLAYER_TEXTDRAW_POOL_SIZE; i++) {
           try {
-            // @ts-ignore
             pool.add_INTERNAL_UNSAFE(new PlayerTextDraw(player, i));
           } catch (e) {}
         }
@@ -144,7 +133,6 @@ async function onResourceStart(_: number, error: boolean) {
 
         for (let i = 0; i < constants.TEXT_LABEL_POOL_SIZE; i++) {
           try {
-            // @ts-ignore
             pool.add_INTERNAL_UNSAFE(new PlayerTextLabel(player, i));
           } catch (e) {}
         }
@@ -166,5 +154,4 @@ async function initializeOmpNodeLibrary(error: boolean) {
   await onResourceStart(0, error);
 }
 
-// @ts-ignore
 __internal_setOmpNodeLibraryFunction(initializeOmpNodeLibrary);

@@ -1,5 +1,6 @@
-import { Player } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type Player from "./Player";
+import { PTR, internal_omp, type NativePointer } from "../globals";
+import { TEXT_DRAW_ALIGN, TEXT_DRAW_FONT } from "../enums";
 
 /**
  * TextDraw class
@@ -11,7 +12,7 @@ export default class TextDraw {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -28,6 +29,7 @@ export default class TextDraw {
    * @param {string} text
    * @throws Will throw an error if the textDraw creation fails
    */
+  constructor(id: number);
   constructor(x: number, y: number, text: string);
 
   constructor(x: number, y?: number, text?: string) {
@@ -78,7 +80,7 @@ export default class TextDraw {
    * @description get textDraw pointer
    * @returns {number|null} textDraw pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -161,7 +163,7 @@ export default class TextDraw {
    * @returns {boolean}
    * @throws Will throw an error if the textDraw is invalid
    */
-  setAlignment(alignment: number): boolean {
+  setAlignment(alignment: TEXT_DRAW_ALIGN): boolean {
     if (!this.ptr) {
       throw new Error("TextDraw instance is not valid");
     }
@@ -266,7 +268,7 @@ export default class TextDraw {
    * @returns {boolean}
    * @throws Will throw an error if the textDraw is invalid
    */
-  setFont(font: number): boolean {
+  setFont(font: TEXT_DRAW_FONT): boolean {
     if (!this.ptr) {
       throw new Error("TextDraw instance is not valid");
     }
@@ -595,7 +597,7 @@ export default class TextDraw {
    * @returns {number}
    * @throws Will throw an error if the textDraw is invalid
    */
-  getFont(): number {
+  getFont(): TEXT_DRAW_FONT {
     if (!this.ptr) {
       throw new Error("TextDraw instance is not valid");
     }
@@ -651,7 +653,7 @@ export default class TextDraw {
    * @returns {number}
    * @throws Will throw an error if the textDraw is invalid
    */
-  getAlignment(): number {
+  getAlignment(): TEXT_DRAW_ALIGN {
     if (!this.ptr) {
       throw new Error("TextDraw instance is not valid");
     }

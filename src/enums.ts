@@ -1,0 +1,651 @@
+/**
+ * TypeScript counterparts of the tagged enums in omp-stdlib.
+ *
+ * The values are part of the open.mp scripting ABI.  These are regular enums
+ * so consumers can use the names at runtime as well as in type positions.
+ * Values that represent flags are accompanied by `*Mask` aliases below;
+ * combining flags produces a number rather than a single enum member.
+ */
+
+// omp_core
+
+export enum WEAPON {
+  UNKNOWN = -1,
+
+  // Special OnPlayerDeath reason values.
+  REASON_VEHICLE = 49,
+  REASON_HELICOPTER_BLADES = 50,
+  REASON_EXPLOSION = 51,
+  REASON_DROWN = 53,
+  REASON_COLLISION = 54,
+  REASON_SPLAT = REASON_COLLISION,
+  REASON_CONNECT = 200,
+  REASON_DISCONNECT = 201,
+  REASON_SUICIDE = 255,
+
+  // Main weapon IDs.
+  FIST = 0,
+  BRASSKNUCKLE = 1,
+  GOLFCLUB = 2,
+  NITESTICK = 3,
+  NIGHTSTICK = NITESTICK,
+  KNIFE = 4,
+  BAT = 5,
+  SHOVEL = 6,
+  POOLSTICK = 7,
+  KATANA = 8,
+  CHAINSAW = 9,
+  DILDO = 10,
+  DILDO2 = 11,
+  VIBRATOR = 12,
+  VIBRATOR2 = 13,
+  FLOWER = 14,
+  CANE = 15,
+  GRENADE = 16,
+  TEARGAS = 17,
+  MOLTOV = 18,
+  MOLOTOV = MOLTOV,
+  COLT45 = 22,
+  SILENCED = 23,
+  DEAGLE = 24,
+  SHOTGUN = 25,
+  SAWEDOFF = 26,
+  SHOTGSPA = 27,
+  UZI = 28,
+  MP5 = 29,
+  AK47 = 30,
+  M4 = 31,
+  TEC9 = 32,
+  RIFLE = 33,
+  SNIPER = 34,
+  ROCKETLAUNCHER = 35,
+  HEATSEEKER = 36,
+  FLAMETHROWER = 37,
+  MINIGUN = 38,
+  SATCHEL = 39,
+  BOMB = 40,
+  SPRAYCAN = 41,
+  FIREEXTINGUISHER = 42,
+  CAMERA = 43,
+  NIGHT_VISION_GOGGLES = 44,
+  NIGHT_VIS_GOGGLES = NIGHT_VISION_GOGGLES,
+  THERMAL_GOGGLES = 45,
+  PARACHUTE = 46,
+
+  // Stdlib compatibility aliases for reason values.
+  WEAPON_UNKNOWN = UNKNOWN,
+  WEAPON_VEHICLE = REASON_VEHICLE,
+  WEAPON_DROWN = REASON_DROWN,
+  WEAPON_COLLISION = REASON_COLLISION,
+  WEAPON_SPLAT = REASON_SPLAT,
+}
+
+export enum WEAPON_SLOT {
+  UNKNOWN = -1,
+  WEAPON_SLOT_UNKNOWN = UNKNOWN,
+  UNARMED = 0,
+  MELEE = 1,
+  PISTOL = 2,
+  SHOTGUN = 3,
+  MACHINE_GUN = 4,
+  ASSAULT_RIFLE = 5,
+  LONG_RIFLE = 6,
+  ARTILLERY = 7,
+  EXPLOSIVES = 8,
+  EQUIPMENT = 9,
+  GIFT = 10,
+  GADGET = 11,
+  DETONATOR = 12,
+}
+
+export enum PLAYER_MARKERS_MODE {
+  UNKNOWN = -1,
+  PLAYER_MARKERS_MODE_UNKNOWN = UNKNOWN,
+  OFF = 0,
+  GLOBAL = 1,
+  STREAMED = 2,
+}
+
+// omp_checkpoint
+
+export enum CP_TYPE {
+  UNKNOWN = -1,
+  GROUND_NORMAL = 0,
+  GROUND_FINISH = 1,
+  GROUND_EMPTY = 2,
+  AIR_NORMAL = 3,
+  AIR_FINISH = 4,
+  AIR_ROTATING = 5,
+  AIR_STROBING = 6,
+  AIR_SWINGING = 7,
+  AIR_BOBBING = 8,
+}
+
+// omp_dialog
+
+export enum DIALOG_STYLE {
+  UNKNOWN = -1,
+  MSGBOX = 0,
+  INPUT = 1,
+  LIST = 2,
+  PASSWORD = 3,
+  TABLIST = 4,
+  TABLIST_HEADERS = 5,
+}
+
+// omp_object
+
+export enum SELECT_OBJECT {
+  UNKNOWN = -1,
+  GLOBAL_OBJECT = 1,
+  PLAYER_OBJECT = 2,
+}
+
+export enum OBJECT_MATERIAL_SIZE {
+  UNKNOWN = -1,
+  SIZE_32x32 = 10,
+  SIZE_64x32 = 20,
+  SIZE_64x64 = 30,
+  SIZE_128x32 = 40,
+  SIZE_128x64 = 50,
+  SIZE_128x128 = 60,
+  SIZE_256x32 = 70,
+  SIZE_256x64 = 80,
+  SIZE_256x128 = 90,
+  SIZE_256x256 = 100,
+  SIZE_512x64 = 110,
+  SIZE_512x128 = 120,
+  SIZE_512x256 = 130,
+  SIZE_512x512 = 140,
+}
+
+export enum OBJECT_MATERIAL_TEXT_ALIGN {
+  UNKNOWN = -1,
+  LEFT = 0,
+  CENTER = 1,
+  CENTRE = CENTER,
+  CENT = CENTER,
+  RIGHT = 2,
+  RIGT = RIGHT,
+}
+
+export enum EDIT_RESPONSE {
+  UNKNOWN = -1,
+  CANCEL = 0,
+  FINAL = 1,
+  UPDATE = 2,
+}
+
+// omp_player
+
+/** Body-part values reported by damage callbacks. */
+export enum BODY_PART {
+  UNKNOWN = -1,
+  TORSO = 3,
+  GROIN = 4,
+  LEFT_ARM = 5,
+  RIGHT_ARM = 6,
+  LEFT_LEG = 7,
+  RIGHT_LEG = 8,
+  HEAD = 9,
+}
+
+export enum PLAYER_STATE {
+  UNKNOWN = -1,
+  NONE = 0,
+  ON_FOOT = 1,
+  DRIVER = 2,
+  PASSENGER = 3,
+  WASTED = 7,
+  SPAWNED = 8,
+  SPECTATING = 9,
+  EXIT_VEHICLE = 4,
+  EXIT_VEH = EXIT_VEHICLE,
+  ENTER_VEHICLE_DRIVER = 5,
+  ENTER_VEHICLE_DRV = ENTER_VEHICLE_DRIVER,
+  ENTER_VEHICLE_PASSENGER = 6,
+  ENTER_VEHICLE_PASS = ENTER_VEHICLE_PASSENGER,
+}
+
+export enum SPECIAL_ACTION {
+  UNKNOWN = -1,
+  NONE = 0,
+  DUCK = 1,
+  USEJETPACK = 2,
+  ENTER_VEHICLE = 3,
+  EXIT_VEHICLE = 4,
+  DANCE1 = 5,
+  DANCE2 = 6,
+  DANCE3 = 7,
+  DANCE4 = 8,
+  HANDSUP = 10,
+  USECELLPHONE = 11,
+  SITTING = 12,
+  STOPUSECELLPHONE = 13,
+  DRINK_BEER = 20,
+  SMOKE_CIGGY = 21,
+  DRINK_WINE = 22,
+  DRINK_SPRUNK = 23,
+  CUFFED = 24,
+  CARRY = 25,
+  PISSING = 68,
+}
+
+export enum FIGHT_STYLE {
+  UNKNOWN = -1,
+  NORMAL = 4,
+  BOXING = 5,
+  KUNGFU = 6,
+  KNEEHEAD = 7,
+  GRABKICK = 15,
+  ELBOW = 16,
+}
+
+export enum WEAPONSKILL {
+  UNKNOWN = -1,
+  INVALID = UNKNOWN,
+  PISTOL = 0,
+  PISTOL_SILENCED = 1,
+  DESERT_EAGLE = 2,
+  SHOTGUN = 3,
+  SAWNOFF_SHOTGUN = 4,
+  SPAS12_SHOTGUN = 5,
+  MICRO_UZI = 6,
+  MP5 = 7,
+  AK47 = 8,
+  M4 = 9,
+  SNIPERRIFLE = 10,
+}
+
+export enum WEAPONSTATE {
+  UNKNOWN = -1,
+  WEAPONSTATE_UNKNOWN = UNKNOWN,
+  NO_BULLETS = 0,
+  LAST_BULLET = 1,
+  MORE_BULLETS = 2,
+  RELOADING = 3,
+}
+
+/** Key and analog-axis values. Key flags may be OR-combined. */
+export enum KEY {
+  UNKNOWN = -1,
+  NONE = 0,
+  ACTION = 1,
+  CROUCH = 2,
+  FIRE = 4,
+  SPRINT = 8,
+  SECONDARY_ATTACK = 16,
+  JUMP = 32,
+  LOOK_RIGHT = 64,
+  HANDBRAKE = 128,
+  AIM = HANDBRAKE,
+  LOOK_LEFT = 256,
+  SUBMISSION = 512,
+  LOOK_BEHIND = SUBMISSION,
+  WALK = 1024,
+  ANALOG_UP = 2048,
+  ANALOG_DOWN = 4096,
+  ANALOG_LEFT = 8192,
+  ANALOG_RIGHT = 16384,
+  YES = 65536,
+  NO = 131072,
+  CTRL_BACK = 262144,
+  UP = -128,
+  DOWN = 128,
+  LEFT = -128,
+  RIGHT = 128,
+}
+
+export enum CAM_MOVE {
+  UNKNOWN = -1,
+  MOVE = 1,
+  CUT = 2,
+  CAMERA_MOVE = MOVE,
+  CAMERA_CUT = CUT,
+}
+
+export enum CAM_MODE {
+  UNKNOWN = -1,
+  DISCONNECTED = UNKNOWN,
+  NONE = 0,
+  BEHINDCAR = 3,
+  FOLLOWPED = 4,
+  SNIPER = 7,
+  ROCKETLAUNCHER = 8,
+  FIXED = 15,
+  FIRST_PERSON = 16,
+  CAM_ON_A_STRING = 18,
+  BEHINDBOAT = 22,
+  CAMERA = 46,
+  ROCKETLAUNCHER_HS = 51,
+  AIMWEAPON = 53,
+  AIMWEAPON_FROMCAR = 55,
+  DW_HELI_CHASE = 56,
+}
+
+export enum MAPICON {
+  UNKNOWN = -1,
+  LOCAL = 0,
+  GLOBAL = 1,
+  LOCAL_CHECKPOINT = 2,
+  GLOBAL_CHECKPOINT = 3,
+}
+
+export enum SPECTATE_MODE {
+  UNKNOWN = -1,
+  NORMAL = 1,
+  FIXED = 2,
+  SIDE = 3,
+}
+
+export enum PLAYER_RECORDING_TYPE {
+  UNKNOWN = -1,
+  NONE = 0,
+  DRIVER = 1,
+  ONFOOT = 2,
+}
+
+export enum FORCE_SYNC {
+  UNKNOWN = -1,
+  SYNC_NONE = 0,
+  SYNC_ALL = 1,
+  SYNC_OTHER = 2,
+
+  // Compatibility aliases used by the earlier JS API proposal.
+  NO_SYNC = SYNC_NONE,
+  SYNC = SYNC_ALL,
+  SYNC_OTHERS = SYNC_OTHER,
+  NONE = SYNC_NONE,
+  ALL = SYNC_ALL,
+  OTHER = SYNC_OTHER,
+}
+
+export enum CLICK_SOURCE {
+  UNKNOWN = -1,
+  SCOREBOARD = 0,
+}
+
+export enum BULLET_HIT_TYPE {
+  UNKNOWN = -1,
+  NONE = 0,
+  PLAYER = 1,
+  VEHICLE = 2,
+  OBJECT = 3,
+  PLAYER_OBJECT = 4,
+}
+
+// omp_network
+
+export enum CONNECTION_STATUS {
+  UNKNOWN = -1,
+  NO_ACTION = 0,
+  DISCONNECT_ASAP = 1,
+  DISCONNECT_ASAP_SILENTLY = 2,
+  DISCONNECT_ON_NO_ACK = 3,
+  REQUESTED_CONNECTION = 4,
+  HANDLING_CONNECTION_REQUEST = 5,
+  UNVERIFIED_SENDER = 6,
+  SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET = 7,
+  CONNECTED = 8,
+
+  CONNSTAT_NO_ACTION = NO_ACTION,
+  CONNSTAT_DISCONNECT_ASAP = DISCONNECT_ASAP,
+  CONNSTAT_DISCONNECT_ASAP_SILNT = DISCONNECT_ASAP_SILENTLY,
+  CONNSTAT_DISCONNECT_ON_NO_ACK = DISCONNECT_ON_NO_ACK,
+  CONNSTAT_REQUESTED_CONNECTION = REQUESTED_CONNECTION,
+  CONNSTAT_HANDLING_CONN_REQ = HANDLING_CONNECTION_REQUEST,
+  CONNSTAT_UNVERIFIED_SENDER = UNVERIFIED_SENDER,
+  CONNSTAT_SET_ENCRYPTION = SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET,
+  CONNSTAT_CONNECTED = CONNECTED,
+}
+
+export enum DOWNLOAD_REQUEST {
+  UNKNOWN = -1,
+  EMPTY = 0,
+  MODEL_FILE = 1,
+  TEXTURE_FILE = 2,
+}
+
+// omp_textdraw
+
+export enum TEXT_DRAW_FONT {
+  UNKNOWN = -1,
+  FONT_0 = 0,
+  FONT_1 = 1,
+  FONT_2 = 2,
+  FONT_3 = 3,
+  SPRITE_DRAW = 4,
+  MODEL_PREVIEW = 5,
+
+  // GTA/open.mp naming aliases.
+  BANK = FONT_0,
+  STANDARD = FONT_1,
+  SPACEAGE = FONT_2,
+  HEADING = FONT_3,
+  BECKETT_REGULAR = FONT_0,
+  AHARONI_BOLD = FONT_1,
+  BANK_GOTHIC = FONT_2,
+  PRICEDOWN = FONT_3,
+  SPRITE = SPRITE_DRAW,
+  PREVIEW = MODEL_PREVIEW,
+}
+
+export enum TEXT_DRAW_ALIGN {
+  UNKNOWN = -1,
+  LEFT = 1,
+  CENTER = 2,
+  CENTRE = CENTER,
+  RIGHT = 3,
+}
+
+// omp_vehicle
+
+export enum CARMODTYPE {
+  UNKNOWN = -1,
+  NONE = UNKNOWN,
+  SPOILER = 0,
+  HOOD = 1,
+  ROOF = 2,
+  SIDESKIRT = 3,
+  SIDE_SKIRT = SIDESKIRT,
+  LAMPS = 4,
+  NITRO = 5,
+  EXHAUST = 6,
+  WHEELS = 7,
+  STEREO = 8,
+  HYDRAULICS = 9,
+  FRONT_BUMPER = 10,
+  REAR_BUMPER = 11,
+  VENT_RIGHT = 12,
+  VENT_LEFT = 13,
+  FRONT_BULLBAR = 14,
+  REAR_BULLBAR = 15,
+}
+
+export enum VEHICLE_MODEL_INFO {
+  UNKNOWN = -1,
+  SIZE = 1,
+  FRONT_SEAT = 2,
+  REAR_SEAT = 3,
+  PETROL_CAP = 4,
+  WHEELS_FRONT = 5,
+  WHEELS_REAR = 6,
+  WHEELS_MID = 7,
+  FRONT_BUMPER_Z = 8,
+  REAR_BUMPER_Z = 9,
+
+  FRONTSEAT = FRONT_SEAT,
+  REARSEAT = REAR_SEAT,
+  PETROLCAP = PETROL_CAP,
+  WHEELSFRONT = WHEELS_FRONT,
+  WHEELSREAR = WHEELS_REAR,
+  WHEELSMID = WHEELS_MID,
+  FRONT_BUMPER = FRONT_BUMPER_Z,
+  REAR_BUMPER = REAR_BUMPER_Z,
+}
+
+export enum VEHICLE_PANEL_STATUS {
+  UNKNOWN = -1,
+  NONE = 0,
+}
+
+export enum VEHICLE_DOOR_STATUS {
+  UNKNOWN = -1,
+  NONE = 0,
+  BONNET_OPEN = 0x00000001,
+  BONNET_DAMAGED = 0x00000002,
+  BONNET_MISSING = 0x00000004,
+  HOOD_OPEN = BONNET_OPEN,
+  HOOD_DAMAGED = BONNET_DAMAGED,
+  HOOD_MISSING = BONNET_MISSING,
+  BOOT_OPEN = 0x00000100,
+  BOOT_DAMAGED = 0x00000200,
+  BOOT_MISSING = 0x00000400,
+  TRUNK_OPEN = BOOT_OPEN,
+  TRUNK_DAMAGED = BOOT_DAMAGED,
+  TRUNK_MISSING = BOOT_MISSING,
+  FRONT_LEFT_OPEN = 0x00010000,
+  FRONT_LEFT_DAMAGED = 0x00020000,
+  FRONT_LEFT_MISSING = 0x00040000,
+  DRIVER_OPEN = FRONT_LEFT_OPEN,
+  DRIVER_DAMAGED = FRONT_LEFT_DAMAGED,
+  DRIVER_MISSING = FRONT_LEFT_MISSING,
+  FRONT_RIGHT_OPEN = 0x01000000,
+  FRONT_RIGHT_DAMAGED = 0x02000000,
+  FRONT_RIGHT_MISSING = 0x04000000,
+  PASSENGER_OPEN = FRONT_RIGHT_OPEN,
+  PASSENGER_DAMAGED = FRONT_RIGHT_DAMAGED,
+  PASSENGER_MISSING = FRONT_RIGHT_MISSING,
+}
+
+export enum VEHICLE_LIGHT_STATUS {
+  UNKNOWN = 0,
+  NONE = 0,
+  FRONT_LEFT_BROKEN = 1,
+  FRONT_RIGHT_BROKEN = 4,
+  DRIVER_BROKEN = FRONT_LEFT_BROKEN,
+  PASSENGER_BROKEN = FRONT_RIGHT_BROKEN,
+  REAR_BROKEN = 64,
+
+  // Short aliases used by the Pawn stdlib for compatibility.
+  CARLIGHT_FRONT_LEFT_BROKEN = FRONT_LEFT_BROKEN,
+  CARLIGHT_FRONT_RIGHT_BROKEN = FRONT_RIGHT_BROKEN,
+  CARLIGHT_DRIVER_BROKEN = DRIVER_BROKEN,
+  CARLIGHT_PASSENGER_BROKEN = PASSENGER_BROKEN,
+  CARLIGHT_REAR_BROKEN = REAR_BROKEN,
+}
+
+export enum VEHICLE_TIRE_STATUS {
+  UNKNOWN = -1,
+  NONE = 0,
+  FRONT_LEFT_POPPED = 8,
+  FRONT_RIGHT_POPPED = 2,
+  REAR_LEFT_POPPED = 4,
+  REAR_RIGHT_POPPED = 1,
+
+  // Both spellings are present in the Pawn stdlib.
+  TIRE_FRONT_LEFT_POPPED = FRONT_LEFT_POPPED,
+  TIRE_FRONT_RIGHT_POPPED = FRONT_RIGHT_POPPED,
+  TIRE_REAR_LEFT_POPPED = REAR_LEFT_POPPED,
+  TIRE_REAR_RIGHT_POPPED = REAR_RIGHT_POPPED,
+  TYRE_FRONT_LEFT_POPPED = FRONT_LEFT_POPPED,
+  TYRE_FRONT_RIGHT_POPPED = FRONT_RIGHT_POPPED,
+  TYRE_REAR_LEFT_POPPED = REAR_LEFT_POPPED,
+  TYRE_REAR_RIGHT_POPPED = REAR_RIGHT_POPPED,
+  CARTIRE_FRONT_LEFT_POPPED = FRONT_LEFT_POPPED,
+  CARTIRE_FRONT_RIGHT_POPPED = FRONT_RIGHT_POPPED,
+  CARTIRE_REAR_LEFT_POPPED = REAR_LEFT_POPPED,
+  CARTIRE_REAR_RIGHT_POPPED = REAR_RIGHT_POPPED,
+  CARTYRE_FRONT_LEFT_POPPED = FRONT_LEFT_POPPED,
+  CARTYRE_FRONT_RIGHT_POPPED = FRONT_RIGHT_POPPED,
+  CARTYRE_REAR_LEFT_POPPED = REAR_LEFT_POPPED,
+  CARTYRE_REAR_RIGHT_POPPED = REAR_RIGHT_POPPED,
+}
+
+/** Alias matching the spelling used by the Pawn stdlib. */
+export { VEHICLE_TIRE_STATUS as VEHICLE_TYRE_STATUS };
+
+export enum LANDING_GEAR_STATE {
+  DOWN = 0,
+  UP = 1,
+}
+
+// omp_npc
+
+export enum NPC_MOVE_TYPE {
+  UNKNOWN = -1,
+  NONE = 0,
+  WALK = 1,
+  JOG = 2,
+  SPRINT = 3,
+  DRIVE = 4,
+  AUTO = 5,
+}
+
+/** NPC entity-check flags may be OR-combined. */
+export enum NPC_ENTITY_CHECK {
+  NONE = 0,
+  PLAYER = 1,
+  NPC = 2,
+  ACTOR = 4,
+  VEHICLE = 8,
+  OBJECT = 16,
+  POBJECT_ORIG = 32,
+  POBJECT_TARG = 64,
+  MAP = 128,
+  ALL = 255,
+}
+
+/** Numeric masks returned/accepted by APIs that carry bit flags. */
+export type KeyMask = number;
+export type VehicleDoorStatusMask = number;
+export type VehicleLightStatusMask = number;
+export type VehicleTireStatusMask = number;
+export type NpcEntityCheckMask = number;
+
+/**
+ * Idiomatic TypeScript names for the runtime enums above.
+ *
+ * The uppercase exports remain available for compatibility with the Pawn
+ * stdlib and the existing open.mp naming. These aliases point to the same
+ * runtime enum objects; no duplicate values or conversion layer is involved.
+ */
+export {
+  WEAPON as Weapon,
+  WEAPON_SLOT as WeaponSlot,
+  PLAYER_MARKERS_MODE as PlayerMarkersMode,
+  CP_TYPE as CheckpointType,
+  DIALOG_STYLE as DialogStyle,
+  SELECT_OBJECT as SelectObject,
+  OBJECT_MATERIAL_SIZE as ObjectMaterialSize,
+  OBJECT_MATERIAL_TEXT_ALIGN as ObjectMaterialTextAlign,
+  EDIT_RESPONSE as EditResponse,
+  BODY_PART as BodyPart,
+  PLAYER_STATE as PlayerState,
+  SPECIAL_ACTION as SpecialAction,
+  FIGHT_STYLE as FightStyle,
+  WEAPONSKILL as WeaponSkill,
+  WEAPONSTATE as WeaponState,
+  KEY as Key,
+  CAM_MOVE as CameraMove,
+  CAM_MODE as CameraMode,
+  MAPICON as MapIcon,
+  SPECTATE_MODE as SpectateMode,
+  PLAYER_RECORDING_TYPE as PlayerRecordingType,
+  FORCE_SYNC as ForceSync,
+  CLICK_SOURCE as ClickSource,
+  BULLET_HIT_TYPE as BulletHitType,
+  CONNECTION_STATUS as ConnectionStatus,
+  DOWNLOAD_REQUEST as DownloadRequest,
+  TEXT_DRAW_FONT as TextDrawFont,
+  TEXT_DRAW_ALIGN as TextDrawAlign,
+  CARMODTYPE as CarModType,
+  VEHICLE_MODEL_INFO as VehicleModelInfo,
+  VEHICLE_PANEL_STATUS as VehiclePanelStatus,
+  VEHICLE_DOOR_STATUS as VehicleDoorStatus,
+  VEHICLE_LIGHT_STATUS as VehicleLightStatus,
+  VEHICLE_TIRE_STATUS as VehicleTireStatus,
+  LANDING_GEAR_STATE as LandingGearState,
+  NPC_MOVE_TYPE as NpcMoveType,
+  NPC_ENTITY_CHECK as NpcEntityCheck,
+};

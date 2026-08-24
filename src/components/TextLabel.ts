@@ -1,5 +1,7 @@
-import { Player, Vehicle, omp } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type Player from "./Player";
+import type Vehicle from "./Vehicle";
+import { PTR, internal_omp, omp, type NativePointer } from "../globals";
+import type { Vector3Result } from "../types";
 
 /**
  * TextLabel class
@@ -11,7 +13,7 @@ export default class TextLabel {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -33,6 +35,8 @@ export default class TextLabel {
    * @param {boolean} los
    * @throws Will throw an error if the textLabel creation fails
    */
+  constructor(id: number);
+
   constructor(
     text: string,
     color: number,
@@ -110,7 +114,7 @@ export default class TextLabel {
    * @description get textLabel pointer
    * @returns {number|null} textLabel pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -262,7 +266,7 @@ export default class TextLabel {
    * @returns {{ret: boolean, x: number,y: number,z: number}} return object
    * @throws Will throw an error if the textLabel is invalid
    */
-  getPos(): { ret: boolean; x: number; y: number; z: number } {
+  getPos(): Vector3Result {
     if (!this.ptr) {
       throw new Error("TextLabel instance is not valid");
     }

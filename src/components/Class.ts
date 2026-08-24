@@ -1,4 +1,5 @@
-import { PTR, internal_omp } from "../globals";
+import { WEAPON } from "../enums";
+import { PTR, internal_omp, type NativePointer } from "../globals";
 
 /**
  * Class class
@@ -10,7 +11,7 @@ export default class Class {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -43,11 +44,11 @@ export default class Class {
     y: number,
     z: number,
     angle: number,
-    weapon1: number,
+    weapon1: WEAPON,
     ammo1: number,
-    weapon2: number,
+    weapon2: WEAPON,
     ammo2: number,
-    weapon3: number,
+    weapon3: WEAPON,
     ammo3: number
   );
 
@@ -58,11 +59,11 @@ export default class Class {
     y?: number,
     z?: number,
     angle?: number,
-    weapon1?: number,
+    weapon1?: WEAPON,
     ammo1?: number,
-    weapon2?: number,
+    weapon2?: WEAPON,
     ammo2?: number,
-    weapon3?: number,
+    weapon3?: WEAPON,
     ammo3?: number
   ) {
     if (arguments.length < 2) {
@@ -125,7 +126,7 @@ export default class Class {
    * @description get class pointer
    * @returns {number|null} class pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -161,11 +162,11 @@ export default class Class {
     y: number;
     z: number;
     angle: number;
-    weapon1: number;
+    weapon1: WEAPON;
     weapon1_ammo: number;
-    weapon2: number;
+    weapon2: WEAPON;
     weapon2_ammo: number;
-    weapon3: number;
+    weapon3: WEAPON;
     weapon3_ammo: number;
   } {
     if (!this.ptr) {
@@ -200,11 +201,11 @@ export default class Class {
     y: number,
     z: number,
     angle: number,
-    weapon1: number,
+    weapon1: WEAPON,
     ammo1: number,
-    weapon2: number,
+    weapon2: WEAPON,
     ammo2: number,
-    weapon3: number,
+    weapon3: WEAPON,
     ammo3: number
   ): boolean {
     if (!this.ptr) {

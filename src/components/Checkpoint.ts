@@ -1,4 +1,4 @@
-import { Player } from "./index";
+import type Player from "./Player";
 import { internal_omp } from "../globals";
 
 /**

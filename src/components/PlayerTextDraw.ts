@@ -1,5 +1,6 @@
-import { Player } from "./index";
-import { PTR, internal_omp, omp } from "../globals";
+import type Player from "./Player";
+import { PTR, internal_omp, omp, type NativePointer } from "../globals";
+import { TEXT_DRAW_ALIGN, TEXT_DRAW_FONT } from "../enums";
 
 /**
  * PlayerTextDraw class
@@ -11,7 +12,7 @@ export default class PlayerTextDraw {
    * @type {number|null}
    * @private
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @var id
@@ -37,6 +38,7 @@ export default class PlayerTextDraw {
    * @param {string} text
    * @throws Will throw an error if the playerTextDraw creation fails
    */
+  constructor(player: Player, id: number);
   constructor(player: Player, x: number, y: number, text: string);
 
   constructor(player: Player, x: number, y?: number, text?: string) {
@@ -104,7 +106,7 @@ export default class PlayerTextDraw {
    * @description get playerTextDraw pointer
    * @returns {number|null} playerTextDraw pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -199,7 +201,7 @@ export default class PlayerTextDraw {
    * @returns {boolean}
    * @throws Will throw an error if the playerTextDraw is invalid
    */
-  setAlignment(alignment: number): boolean {
+  setAlignment(alignment: TEXT_DRAW_ALIGN): boolean {
     if (!this.ptr || !this.player) {
       throw new Error("PlayerTextDraw instance is not valid");
     }
@@ -332,7 +334,7 @@ export default class PlayerTextDraw {
    * @returns {boolean}
    * @throws Will throw an error if the playerTextDraw is invalid
    */
-  setFont(font: number): boolean {
+  setFont(font: TEXT_DRAW_FONT): boolean {
     if (!this.ptr || !this.player) {
       throw new Error("PlayerTextDraw instance is not valid");
     }
@@ -680,7 +682,7 @@ export default class PlayerTextDraw {
    * @returns {number}
    * @throws Will throw an error if the playerTextDraw is invalid
    */
-  getFont(): number {
+  getFont(): TEXT_DRAW_FONT {
     if (!this.ptr || !this.player) {
       throw new Error("PlayerTextDraw instance is not valid");
     }
@@ -748,7 +750,7 @@ export default class PlayerTextDraw {
    * @returns {number}
    * @throws Will throw an error if the playerTextDraw is invalid
    */
-  getAlignment(): number {
+  getAlignment(): TEXT_DRAW_ALIGN {
     if (!this.ptr || !this.player) {
       throw new Error("PlayerTextDraw instance is not valid");
     }

@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import {
   Actor,
   GangZone,
@@ -15,14 +13,66 @@ import {
   TextLabel,
   Vehicle,
 } from "./components";
-import EventEmitter from "events";
 import { internal_omp, omp } from "./globals.js";
+import type { EventArgs, EventName } from "./event-types";
+import type { NativePointer, PoolEntity } from "./types";
 
-const processEventListeners = async (name: string, badRet: number, ...args) => {
-  const listeners = internal_omp.eventEmitter.listeners(name);
-  let result = true;
+type NativeValue<T> = T extends PoolEntity ? NativePointer : T;
+type NativeArgs<T extends readonly unknown[]> = {
+  [K in keyof T]: NativeValue<T[K]>;
+};
+
+type InternalEventMap = {
+  playerPoolEntryCreate: [badRet: number, entityId: number];
+  playerPoolEntryDestroy: [badRet: number, entityId: number];
+  vehiclePoolEntryCreate: [badRet: number, entityId: number];
+  vehiclePoolEntryDestroy: [badRet: number, entityId: number];
+  objectPoolEntryCreate: [badRet: number, entityId: number];
+  objectPoolEntryDestroy: [badRet: number, entityId: number];
+  textdrawPoolEntryCreate: [badRet: number, entityId: number];
+  textdrawPoolEntryDestroy: [badRet: number, entityId: number];
+  pickupPoolEntryCreate: [badRet: number, entityId: number];
+  pickupPoolEntryDestroy: [badRet: number, entityId: number];
+  gangzonePoolEntryCreate: [badRet: number, entityId: number];
+  gangzonePoolEntryDestroy: [badRet: number, entityId: number];
+  textlabelPoolEntryCreate: [badRet: number, entityId: number];
+  textlabelPoolEntryDestroy: [badRet: number, entityId: number];
+  actorPoolEntryCreate: [badRet: number, entityId: number];
+  actorPoolEntryDestroy: [badRet: number, entityId: number];
+  menuPoolEntryCreate: [badRet: number, entityId: number];
+  menuPoolEntryDestroy: [badRet: number, entityId: number];
+  npcPoolEntryCreate: [badRet: number, entityId: number];
+  npcPoolEntryDestroy: [badRet: number, entityId: number];
+  playerObjectPoolEntryCreate: [badRet: number, playerId: number, entityId: number];
+  playerObjectPoolEntryDestroy: [badRet: number, playerId: number, entityId: number];
+  playerTextLabelPoolEntryCreate: [badRet: number, playerId: number, entityId: number];
+  playerTextLabelPoolEntryDestroy: [badRet: number, playerId: number, entityId: number];
+  playerTextDrawPoolEntryCreate: [badRet: number, playerId: number, entityId: number];
+  playerTextDrawPoolEntryDestroy: [badRet: number, playerId: number, entityId: number];
+};
+
+type RawEventMap = {
+  [K in EventName]: [badRet: number, ...NativeArgs<EventArgs<K>>];
+} & InternalEventMap;
+
+type RawEventName = keyof RawEventMap;
+type RawListener = (...args: unknown[]) => unknown;
+
+interface RawEventEmitter {
+  on<K extends RawEventName>(
+    name: K,
+    listener: (...args: RawEventMap[K]) => unknown
+  ): this;
+}
+
+const processEventListeners = async (
+  name: EventName,
+  badRet: number,
+  ...args: unknown[]
+) => {
+  const listeners = internal_omp.eventEmitter.listeners(name) as RawListener[];
   for (const listener of listeners) {
-    result = await listener(...args);
+    const result = await listener(...args);
     if (typeof result === "boolean" || typeof result === "number") {
       switch (badRet) {
         case 1:
@@ -43,10 +93,19 @@ const processEventListeners = async (name: string, badRet: number, ...args) => {
   }
 };
 
+const requirePlayerId = (player: Player, eventName: string): number => {
+  const playerId = player.getID();
+  if (playerId === null) {
+    throw new Error(`Unable to get player ID for ${eventName}`);
+  }
+
+  return playerId;
+};
+
 /**
  * @type {EventEmitter}
  */
-const eventEmitter_raw: EventEmitter = internal_omp.eventEmitter_raw;
+const eventEmitter_raw: RawEventEmitter = internal_omp.eventEmitter_raw;
 export const initializeEvents = () => {
   // Internal playerPoolEntryCreate event handler
   eventEmitter_raw.on("playerPoolEntryCreate", async (_, entityId) => {
@@ -61,7 +120,9 @@ export const initializeEvents = () => {
   // Internal playerPoolEntryDestroy event handler
   eventEmitter_raw.on("playerPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.players.at(entityId);
-    omp.players.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.players.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal vehiclePoolEntryCreate event handler
@@ -77,7 +138,9 @@ export const initializeEvents = () => {
   // Internal vehiclePoolEntryDestroy event handler
   eventEmitter_raw.on("vehiclePoolEntryDestroy", async (_, entityId) => {
     const entity = omp.vehicles.at(entityId);
-    omp.vehicles.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.vehicles.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal objectPoolEntryCreate event handler
@@ -93,7 +156,9 @@ export const initializeEvents = () => {
   // Internal objectPoolEntryDestroy event handler
   eventEmitter_raw.on("objectPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.objects.at(entityId);
-    omp.objects.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.objects.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal textdrawPoolEntryCreate event handler
@@ -109,7 +174,9 @@ export const initializeEvents = () => {
   // Internal textdrawPoolEntryDestroy event handler
   eventEmitter_raw.on("textdrawPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.textdraws.at(entityId);
-    omp.textdraws.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.textdraws.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal pickupPoolEntryCreate event handler
@@ -125,7 +192,9 @@ export const initializeEvents = () => {
   // Internal pickupPoolEntryDestroy event handler
   eventEmitter_raw.on("pickupPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.pickups.at(entityId);
-    omp.pickups.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.pickups.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal gangzonePoolEntryCreate event handler
@@ -141,7 +210,9 @@ export const initializeEvents = () => {
   // Internal gangzonePoolEntryDestroy event handler
   eventEmitter_raw.on("gangzonePoolEntryDestroy", async (_, entityId) => {
     const entity = omp.gangzones.at(entityId);
-    omp.gangzones.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.gangzones.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal textlabelPoolEntryCreate event handler
@@ -157,7 +228,9 @@ export const initializeEvents = () => {
   // Internal textlabelPoolEntryDestroy event handler
   eventEmitter_raw.on("textlabelPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.textlabels.at(entityId);
-    omp.textlabels.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.textlabels.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal actorPoolEntryCreate event handler
@@ -173,7 +246,9 @@ export const initializeEvents = () => {
   // Internal actorPoolEntryDestroy event handler
   eventEmitter_raw.on("actorPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.actors.at(entityId);
-    omp.actors.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.actors.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal menuPoolEntryCreate event handler
@@ -189,7 +264,9 @@ export const initializeEvents = () => {
   // Internal menuPoolEntryDestroy event handler
   eventEmitter_raw.on("menuPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.menus.at(entityId);
-    omp.menus.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.menus.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal npcPoolEntryCreate event handler
@@ -205,7 +282,9 @@ export const initializeEvents = () => {
   // Internal npcPoolEntryDestroy event handler
   eventEmitter_raw.on("npcPoolEntryDestroy", async (_, entityId) => {
     const entity = omp.npcs.at(entityId);
-    omp.npcs.remove_INTERNAL_UNSAFE(entity);
+    if (entity) {
+      omp.npcs.remove_INTERNAL_UNSAFE(entity);
+    }
   });
 
   // Internal playerObjectPoolEntryCreate event handler
@@ -232,7 +311,9 @@ export const initializeEvents = () => {
       const playerPool = omp.playerObjects.at(playerId);
       if (playerPool) {
         const entity = playerPool.at(entityId);
-        playerPool.remove_INTERNAL_UNSAFE(entity);
+        if (entity) {
+          playerPool.remove_INTERNAL_UNSAFE(entity);
+        }
       }
     }
   );
@@ -261,7 +342,9 @@ export const initializeEvents = () => {
       const playerPool = omp.playerTextLabels.at(playerId);
       if (playerPool) {
         const entity = playerPool.at(entityId);
-        playerPool.remove_INTERNAL_UNSAFE(entity);
+        if (entity) {
+          playerPool.remove_INTERNAL_UNSAFE(entity);
+        }
       }
     }
   );
@@ -290,7 +373,9 @@ export const initializeEvents = () => {
       const playerPool = omp.playerTextDraws.at(playerId);
       if (playerPool) {
         const entity = playerPool.at(entityId);
-        playerPool.remove_INTERNAL_UNSAFE(entity);
+        if (entity) {
+          playerPool.remove_INTERNAL_UNSAFE(entity);
+        }
       }
     }
   );
@@ -605,10 +690,14 @@ export const initializeEvents = () => {
       throw new Error(
         "Unable to cast player to Player for playerObjectMove. Value: " + player
       );
-    const object_ = omp.objects.get(object);
+    const playerObjects = omp.playerObjects.at(
+      requirePlayerId(player_, "playerObjectMove")
+    );
+    const object_ = playerObjects?.get(object);
     if (object_ === undefined)
       throw new Error(
-        "Unable to cast object to Object for playerObjectMove. Value: " + object
+        "Unable to cast object to PlayerObject for playerObjectMove. Value: " +
+          object
       );
 
     return processEventListeners("playerObjectMove", badRet, player_, object_);
@@ -679,10 +768,13 @@ export const initializeEvents = () => {
           "Unable to cast player to Player for playerEditPlayerObject. Value: " +
             player
         );
-      const object_ = omp.objects.get(object);
+      const playerObjects = omp.playerObjects.at(
+        requirePlayerId(player_, "playerEditPlayerObject")
+      );
+      const object_ = playerObjects?.get(object);
       if (object_ === undefined)
         throw new Error(
-          "Unable to cast object to Object for playerEditPlayerObject. Value: " +
+          "Unable to cast object to PlayerObject for playerEditPlayerObject. Value: " +
             object
         );
 
@@ -790,10 +882,13 @@ export const initializeEvents = () => {
           "Unable to cast player to Player for playerSelectPlayerObject. Value: " +
             player
         );
-      const object_ = omp.objects.get(object);
+      const playerObjects = omp.playerObjects.at(
+        requirePlayerId(player_, "playerSelectPlayerObject")
+      );
+      const object_ = playerObjects?.get(object);
       if (object_ === undefined)
         throw new Error(
-          "Unable to cast object to Object for playerSelectPlayerObject. Value: " +
+          "Unable to cast object to PlayerObject for playerSelectPlayerObject. Value: " +
             object
         );
 
@@ -818,7 +913,7 @@ export const initializeEvents = () => {
         "Unable to cast player to Player for playerPickUpPickup. Value: " +
           player
       );
-    const pickup_ = omp.players.get(pickup);
+    const pickup_ = omp.pickups.get(pickup);
     if (pickup_ === undefined)
       throw new Error(
         "Unable to cast pickup to Pickup for playerPickUpPickup. Value: " +
@@ -884,7 +979,7 @@ export const initializeEvents = () => {
       const textdraw_ = omp.textdraws.get(textdraw);
       if (textdraw_ === undefined) {
         const playerTextdraw = omp.playerTextDraws
-          .at(player_.getID())
+          .at(requirePlayerId(player_, "playerClickTextDraw"))
           ?.get(textdraw);
         if (playerTextdraw !== undefined) {
           return processEventListeners(
@@ -920,7 +1015,9 @@ export const initializeEvents = () => {
           "Unable to cast player to Player for playerClickPlayerTextDraw. Value: " +
             player
         );
-      const textdraw_ = omp.playerTextDraws.at(player_.getID())?.get(textdraw);
+      const textdraw_ = omp.playerTextDraws
+        .at(requirePlayerId(player_, "playerClickPlayerTextDraw"))
+        ?.get(textdraw);
       if (textdraw_ === undefined)
         throw new Error(
           "Unable to cast textdraw to TextDraw for playerClickPlayerTextDraw. Value: " +
@@ -1227,7 +1324,9 @@ export const initializeEvents = () => {
             player
         );
 
-      const playerObjects = omp.playerObjects.at(player_.getID());
+      const playerObjects = omp.playerObjects.at(
+        requirePlayerId(player_, "playerShotPlayerObject")
+      );
       if (playerObjects === undefined)
         throw new Error(
           "Unable to get player's PlayerObject pool for playerShotPlayerObject. Value: " +
@@ -1262,7 +1361,7 @@ export const initializeEvents = () => {
         "Unable to cast player to Player for playerDeath. Value: " + player
       );
 
-    const killer_ = omp.players.get(killer);
+    const killer_ = killer === undefined ? undefined : omp.players.get(killer);
 
     return processEventListeners(
       "playerDeath",
@@ -1284,7 +1383,7 @@ export const initializeEvents = () => {
             player
         );
 
-      const from_ = omp.players.get(from);
+      const from_ = from === undefined ? undefined : omp.players.get(from);
 
       return processEventListeners(
         "playerTakeDamage",
@@ -1878,7 +1977,7 @@ export const initializeEvents = () => {
     if (npc_ === undefined)
       throw new Error("Unable to cast npc to NPC for npcDeath. Value: " + npc);
 
-    const killer_ = omp.players.get(killer);
+    const killer_ = killer === undefined ? undefined : omp.players.get(killer);
 
     return processEventListeners("npcDeath", badRet, npc_, killer_, reason);
   });
@@ -2080,11 +2179,13 @@ export const initializeEvents = () => {
           "Unable to NPC player instance in npcShotPlayerObject. Value: " + npc
         );
 
-      const playerObjects = omp.playerObjects.at(playerInstance_.getID());
+      const playerObjects = omp.playerObjects.at(
+        requirePlayerId(playerInstance_, "npcShotPlayerObject")
+      );
       if (playerObjects === undefined)
         throw new Error(
           "Unable to get player's PlayerObject pool for playerShotPlayerObject. Value: " +
-            target
+            playerObject
         );
 
       const playerObject_ = playerObjects.get(playerObject);

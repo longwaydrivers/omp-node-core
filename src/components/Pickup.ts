@@ -1,5 +1,6 @@
-import { Player } from "./index";
-import { PTR, internal_omp } from "../globals";
+import type Player from "./Player";
+import { PTR, internal_omp, type NativePointer } from "../globals";
+import type { Vector3Result } from "../types";
 
 /**
  * Pickup class
@@ -9,7 +10,7 @@ export default class Pickup {
    * @private
    * @var {number|null} Pickup pointer
    */
-  private ptr: number | null = null;
+  private ptr: NativePointer | null = null;
 
   /**
    * @private
@@ -27,6 +28,8 @@ export default class Pickup {
    * @param {number} virtualWorld
    * @throws Will throw an error if the pickup creation fails
    */
+  constructor(id: number);
+
   constructor(
     model: number,
     type: number,
@@ -98,7 +101,7 @@ export default class Pickup {
    * @description get pickup pointer
    * @returns {number|null} pickup pointer
    */
-  getPtr(): number | null {
+  getPtr(): NativePointer | null {
     return this.ptr;
   }
 
@@ -180,7 +183,7 @@ export default class Pickup {
    * @returns {{ret: boolean, x: number,y: number,z: number}} return object
    * @throws Will throw an error if the pickup is invalid
    */
-  getPos(): { ret: boolean; x: number; y: number; z: number } {
+  getPos(): Vector3Result {
     if (!this.ptr) {
       throw new Error("Pickup instance is not valid");
     }
