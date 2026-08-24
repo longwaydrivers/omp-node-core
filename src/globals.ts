@@ -15,7 +15,11 @@ import type {
 } from "./components";
 import type { PerPlayerEntityPool, PlayerPool, Pool } from "./pools";
 import type { EventCallback, EventMap, EventName } from "./event-types";
-import type { EventHandlerResult, NativePointer } from "./types";
+import type {
+  EventHandlerResult,
+  NativePointer,
+  TextDrawLimits,
+} from "./types";
 
 // The native host injects this object before the resource starts. Its full
 // ABI is intentionally private to the bridge; public wrappers expose typed
@@ -23,7 +27,7 @@ import type { EventHandlerResult, NativePointer } from "./types";
 // @ts-expect-error -- __internal_omp is injected by the native host at runtime.
 export const internal_omp = __internal_omp;
 
-export type { EventHandlerResult, NativePointer } from "./types";
+export type { EventHandlerResult, NativePointer, TextDrawLimits } from "./types";
 export type { EventArgs, EventCallback, EventMap, EventName } from "./event-types";
 
 /** Convert a native pointer to the representation used by this process. */
@@ -36,6 +40,11 @@ export function PTR(value: NativePointer): NativePointer {
 }
 
 type CustomEventName<T extends string> = T extends EventName ? never : T;
+
+export interface OmpLimits {
+  /** Capacities read from the server's textdraw configuration. */
+  textDraw: TextDrawLimits;
+}
 
 export interface IOMP {
   /** Register a listener for a built-in open.mp event. */
@@ -93,6 +102,9 @@ export interface IOMP {
   playerObjects: PerPlayerEntityPool<PlayerPool<PlayerObject>>;
   playerTextLabels: PerPlayerEntityPool<PlayerPool<PlayerTextLabel>>;
   playerTextDraws: PerPlayerEntityPool<PlayerPool<PlayerTextDraw>>;
+
+  /** Runtime capacities supplied by the server. */
+  limits: OmpLimits;
 
   /** Resource metadata supplied by the native host. */
   resource: {

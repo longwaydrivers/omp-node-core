@@ -4,6 +4,7 @@
   "description": "open.mp core nodejs package. contains constants, type definitions, and initializers",
   "scripts": {
     "build": "rollup -c rollup.config.mjs --environment TARGET:@omp-node/core",
+    "test": "npm run build && node --test test/limits.test.mjs",
     "prepare": "npm run build"
   },
   "keywords": [

@@ -25,10 +25,16 @@ import { omp } from "./globals";
 
 export * from "./constants";
 export * from "./enums";
-export type { NativePointer, PoolEntity, QuaternionResult, Vector3Result } from "./types";
+export type {
+  NativePointer,
+  PoolEntity,
+  QuaternionResult,
+  TextDrawLimits,
+  Vector3Result,
+} from "./types";
 export type { EventArgs, EventCallback, EventMap, EventName } from "./event-types";
 export { Pool, PlayerPool, PerPlayerEntityPool } from "./pools";
-export type { EventHandlerResult, IOMP } from "./globals";
+export type { EventHandlerResult, IOMP, OmpLimits } from "./globals";
 
 export {
   ObjectMp,

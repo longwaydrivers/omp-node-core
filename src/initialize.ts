@@ -17,9 +17,13 @@ import {
   Vehicle,
 } from "./components";
 import { initializeEvents } from "./events";
+import { getTextDrawLimits } from "./limits";
 
 async function onResourceStart(_: number, error: boolean) {
   if (!error) {
+    const textDrawLimits = getTextDrawLimits();
+    omp.limits = { textDraw: textDrawLimits };
+
     omp.players = new Pool<Player>();
     for (let i = 0; i < constants.PLAYER_POOL_SIZE; i++) {
       try {
@@ -42,7 +46,7 @@ async function onResourceStart(_: number, error: boolean) {
     }
 
     omp.textdraws = new Pool<TextDraw>();
-    for (let i = 0; i < constants.GLOBAL_TEXTDRAW_POOL_SIZE; i++) {
+    for (let i = 0; i < textDrawLimits.global; i++) {
       try {
         omp.textdraws.add_INTERNAL_UNSAFE(new TextDraw(i));
       } catch (e) {}
@@ -114,7 +118,7 @@ async function onResourceStart(_: number, error: boolean) {
         const entries = omp.playerTextDraws.entries_INTERNAL_UNSAFE();
         const pool = new PlayerPool<PlayerTextDraw>(player);
 
-        for (let i = 0; i < constants.PLAYER_TEXTDRAW_POOL_SIZE; i++) {
+        for (let i = 0; i < textDrawLimits.player; i++) {
           try {
             pool.add_INTERNAL_UNSAFE(new PlayerTextDraw(player, i));
           } catch (e) {}

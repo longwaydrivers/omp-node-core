@@ -37,6 +37,22 @@ const doors: VehicleDoorStatusMask =
 
 The aliases are intentionally `number`: a bitwise combination is not a single enum member. The exported flag enums provide readable constants and the mask aliases describe the API boundary.
 
+## Runtime limits
+
+`TextDrawLimits` describes the textdraw capacities resolved during resource
+startup:
+
+```ts
+import { omp, type TextDrawLimits } from "@omp-node/core";
+
+const limits: TextDrawLimits = omp.limits.textDraw;
+limits.global;
+limits.player;
+```
+
+These are runtime values. Do not use the exported textdraw pool-size constants
+to infer the capacity of a server that supports configurable textdraw pools.
+
 ## Player and combat enums
 
 ### `WEAPON`
@@ -172,7 +188,7 @@ Constants are also runtime exports. They describe server limits, invalid IDs, po
 
 | Group | Exports |
 | --- | --- |
-| Pool sizes | `PLAYER_POOL_SIZE`, `VEHICLE_POOL_SIZE`, `CLASS_POOL_SIZE`, `OBJECT_POOL_SIZE`, `OBJECT_POOL_SIZE_037`, `TEXT_LABEL_POOL_SIZE`, `PICKUP_POOL_SIZE`, `GLOBAL_TEXTDRAW_POOL_SIZE`, `PLAYER_TEXTDRAW_POOL_SIZE`, `ACTOR_POOL_SIZE`, `MENU_POOL_SIZE`, `GANG_ZONE_POOL_SIZE`, `NPC_POOL_SIZE` |
+| Pool sizes | `PLAYER_POOL_SIZE`, `VEHICLE_POOL_SIZE`, `CLASS_POOL_SIZE`, `OBJECT_POOL_SIZE`, `OBJECT_POOL_SIZE_037`, `TEXT_LABEL_POOL_SIZE`, `PICKUP_POOL_SIZE`, `GLOBAL_TEXTDRAW_POOL_SIZE`, `PLAYER_TEXTDRAW_POOL_SIZE`, `ACTOR_POOL_SIZE`, `MENU_POOL_SIZE`, `GANG_ZONE_POOL_SIZE`, `NPC_POOL_SIZE` (static fallback values; use `omp.limits.textDraw` for runtime textdraw capacities) |
 | Entity limits | `MAX_SEATS`, `MAX_WEAPON_SLOTS`, `MAX_VEHICLE_MODELS`, `MAX_WEAPON_ID`, `NUM_SKILL_LEVELS`, `MAX_ANIMATIONS`, `MAX_ATTACHED_OBJECT_SLOTS`, `MAX_OBJECT_MATERIAL_SLOTS`, `MAX_VEHICLE_COMPONENTS`, `MAX_VEHICLE_COMPONENT_SLOT`, `MAX_VEHICLE_COMPONENT_SLOT_IN_RPC`, `MAX_TEXT_LABELS`, `MAX_GLOBAL_TEXTDRAWS`, `MAX_PLAYER_TEXTDRAWS`, `MAX_MENU_ITEMS`, `MAX_DIALOG`, `MAX_STREAMED_PLAYERS`, `MAX_STREAMED_ACTORS`, `MAX_STREAMED_VEHICLES`, `MAX_VEHICLE_CARRIAGES`, `MAX_GAMETEXT_STYLES` |
 | Text/name limits | `MIN_PLAYER_NAME`, `MAX_PLAYER_NAME`, `MAX_MENU_TEXT_LENGTH`, `MAX_TEXTDRAW_STR_LENGTH` |
 | Invalid values | `INVALID_WEAPON_SLOT`, `INVALID_VEHICLE_ID`, `INVALID_OBJECT_ID`, `INVALID_PLAYER_ID`, `INVALID_ACTOR_ID`, `INVALID_TEXT_LABEL_ID`, `INVALID_COMPONENT_ID`, `INVALID_TEXTDRAW`, `INVALID_MENU_ID`, `INVALID_DIALOG_ID`, `INVALID_GANG_ZONE_ID`, `INVALID_PICKUP_ID`, `INVALID_OBJECT_MODEL_ID`, `INVALID_MENU_ITEM_ID`, `INVALID_PATH_ID`, `INVALID_NODE_ID`, `INVALID_RECORD_ID` |

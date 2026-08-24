@@ -14,6 +14,12 @@ export type EventHandlerResult =
   | number
   | Promise<void | boolean | number>;
 
+/** Textdraw capacities resolved from the running server configuration. */
+export interface TextDrawLimits {
+  readonly global: number;
+  readonly player: number;
+}
+
 /**
  * Minimum contract required for an entity to be stored in a pool.
  *

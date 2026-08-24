@@ -20,6 +20,21 @@ This page is the map of the complete public API. Every name below is exported by
 
 `omp.log(message?, ...optionalParams)` writes to the open.mp server log as well as the Node process log.
 
+### Runtime limits
+
+`omp.limits.textDraw` contains the capacities reported by the running server:
+
+```ts
+omp.limits.textDraw.global;
+omp.limits.textDraw.player;
+```
+
+These values come from `textdraw.global_limit` and `textdraw.player_limit` in
+the server configuration. The legacy `max_global_textdraws` and
+`max_player_textdraws` keys are also recognized. The exported
+`GLOBAL_TEXTDRAW_POOL_SIZE` and `PLAYER_TEXTDRAW_POOL_SIZE` values are only
+fallbacks for hosts that do not expose either configuration form.
+
 ### Entity pools
 
 | Property | Type | Contents |
