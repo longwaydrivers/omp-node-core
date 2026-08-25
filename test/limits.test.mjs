@@ -8,11 +8,9 @@ const internal = new Proxy({
   eventEmitter: { listeners() { return []; } },
   eventEmitter_raw: eventEmitterRaw,
   Config: {
-    GetAsString(key) {
+    GetAsInt(key) {
       const value = configured.get(key);
-      return value === undefined
-        ? { ret: false, output: "" }
-        : { ret: true, output: value };
+      return { ret: value === undefined ? 0 : Number(value) };
     },
   },
 }, {
@@ -60,13 +58,13 @@ test("accepts legacy textdraw limit keys", async () => {
   );
 });
 
-test("preserves zero as a valid configured capacity", async () => {
+test("falls back to defaults for zero capacities", async () => {
   assert.deepEqual(
     await limitsFor([
       ["textdraw.global_limit", "0"],
       ["textdraw.player_limit", "0"],
     ]),
-    { global: 0, player: 0 },
+    { global: 2048, player: 256 },
   );
 });
 

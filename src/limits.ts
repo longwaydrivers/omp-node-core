@@ -14,9 +14,12 @@ const PLAYER_TEXTDRAW_CONFIG_KEYS = [
 
 function readConfigValue(keys: readonly string[]): string | undefined {
   for (const key of keys) {
-    const result = Config.getAsString(key);
-    if (result.ret) {
-      return result.output;
+    // These are integer config values. Using GetAsString for a deprecated
+    // alias can make CAPI resolve the alias to an integer option and return a
+    // null string view, which crashes the server in the native bridge.
+    const result = Config.getAsInt(key);
+    if (result !== 0) {
+      return String(result);
     }
   }
 
@@ -48,8 +51,10 @@ function defaultTextDrawLimits(): TextDrawLimits {
  *
  * The modern config keys are preferred. Legacy keys are accepted for older
  * hosts, and the exported pool-size constants remain the final fallback when
- * no configuration value is available. The server reserves INVALID_TEXTDRAW
- * as a sentinel, so an invalid combined capacity falls back as a pair.
+ * no configuration value is available. The integer CAPI getter represents
+ * both a missing option and zero as 0, so zero uses the same fallback. The
+ * server reserves INVALID_TEXTDRAW as a sentinel, so an invalid combined
+ * capacity falls back as a pair.
  */
 export function getTextDrawLimits(): TextDrawLimits {
   const globalValue = readConfigValue(GLOBAL_TEXTDRAW_CONFIG_KEYS);
